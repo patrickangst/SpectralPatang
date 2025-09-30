@@ -1,3 +1,18 @@
+# ############################################################
+# Script Name:    CreateRGB.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Creates RGB images from hyperspectral data by selecting specific bands and exporting as raster files.
+#
+# Dependencies:   terra
+# Input Files:    Raw hyperspectral images
+# Output Files:   RGB raster images
+#
+# License:        MIT
+# ############################################################
+
 #' Create RGB image
 #'
 #' This function is used to create a RGB image out of a hyperspectral image

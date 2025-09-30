@@ -1,3 +1,18 @@
+# ############################################################
+# Script Name:    CreateRectangleFromPlotlocations.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Creates a rectangular shapefile (cutline) around plot locations for use in image rectification and spatial analysis.
+#
+# Dependencies:   sf
+# Input Files:    Plot location shapefiles
+# Output Files:   Rectangular cutline shapefiles
+#
+# License:        MIT
+# ############################################################
+
 #' Create Rectangular shapefile from plot locations
 #'
 #' This function is used to create a rectangular box around plot locations

@@ -1,12 +1,18 @@
-# ─────────────────────────────────────────────────────────────
-# Title: [Descriptive Script Title]
-# Author: Patrick Byron Angst
-# Date: [YYYY-MM-DD]
-# Purpose: [Brief summary of what the script does]
-# License: MIT (or specify)
-# Language: R (UTF-8, multilingual support)
-# Dependencies: [List of required packages]
-# ─────────────────────────────────────────────────────────────
+
+############################################################
+# Script Name:    Full_Workflow.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Main workflow for masking, rectification, PCA, clustering, and diversity mapping on hyperspectral ecological data.
+#
+# Dependencies:   SpectralPatang, biodivMapR, doParallel, terra, ggplot2, reshape2, gridExtra, RColorBrewer, readxl, writexl, dplyr
+# Input Files:    Hyperspectral images, mask files, metrics Excel, shapefiles
+# Output Files:   Processed rasters, PNG plots, Excel summaries
+#
+# License:        MIT
+############################################################
 
 rm(list = ls(all = TRUE))
 gc()

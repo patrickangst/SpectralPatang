@@ -1,4 +1,21 @@
-rm(list = ls())
+
+############################################################
+# Script Name:    CreateMask_Batch.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Batch script for generating SAVI masks for rectified hyperspectral images in multiple subfolders.
+#
+# Dependencies:   doParallel, foreach, SpectralPatang
+# Input Files:    Rectified hyperspectral images
+# Output Files:   SAVI mask rasters
+#
+# License:        MIT
+############################################################
+
+rm(list = ls(all = TRUE))
+gc()
 graphics.off()
 
 devtools::load_all()
@@ -86,8 +103,3 @@ num_cores_to_use <- detectCores()  # Adjust the number of cores based on your sy
 #debug(process_all_subfolders)
 #results <- process_all_subfolders_cluster(main_folder, num_cores = num_cores_to_use)
 process_all_subfolders(main_folder)
-
-# Print results
-# print(results)
-
-

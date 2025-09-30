@@ -1,45 +1,3 @@
-# ------------------------------------------------------------------------------
-# Description:
-# This script performs automated k-means clustering on a batch of PCA-transformed 
-# hyperspectral images (GeoTIFFs) located in a specified folder. For each image, 
-# the script first removes any rows with missing (NA) values, scales the data, 
-# and evaluates multiple values of the `nstart` parameter to identify the one 
-# that produces the lowest within-cluster sum of squares (WSS) for a fixed number 
-# of clusters. Once the optimal `nstart` value is selected, it evaluates the WSS 
-# for a range of cluster numbers (`min_clusters` to `max_clusters`), using the 
-# Elbow Method (based on the second derivative of the WSS curve) to determine the 
-# optimal number of clusters.
-#
-# The final k-means clustering is then applied to the cleaned and scaled PCA matrix 
-# using the selected optimal parameters. Cluster assignments are reshaped back into 
-# the original image dimensions and saved as GeoTIFF rasters to a dedicated 
-# output folder ("kmeans_analysis/"). This process is repeated for each image in 
-# the input directory (`hs/`).
-#
-# Parameters:
-# - `hs_folder`: Path to the folder containing PCA .tif files.
-# - `min_clusters`, `max_clusters`: Range of k values to consider.
-# - `nstart_values`: Vector of `nstart` values to test for stability of clustering.
-#
-# Returns:
-# - A set of clustered raster files (GeoTIFF) named according to the source file 
-#   and optimal cluster count, stored in the output folder.
-#
-# Dependencies:
-# - terra: For raster handling and manipulation.
-# - tools: For file path manipulation.
-# - ggplot2: (Loaded but not actively used in this script.)
-#
-# Notes:
-# - The script assumes that input rasters are PCA-reduced hyperspectral images.
-# - Clustering is performed only if the image has sufficient non-NA pixels 
-#   (more than `max_clusters`).
-# - The Elbow Method assumes the WSS curve is smooth and convex. In cases where 
-#   the curve is noisy or lacks an elbow, the minimum number of clusters is used 
-#   as fallback.
-# ------------------------------------------------------------------------------
-
-
 # Clean environment
 rm(list = ls(all = TRUE))
 gc()
@@ -96,7 +54,7 @@ for (hyperspectral_path in tif_files) {
   # Scale the cleaned matrix
   scaled_pca_matrix <- scale(pca_matrix_clean)
   
-  # Step 1: Find the best nstart value
+  # Find the best nstart value
   best_nstart <- nstart_values[1]
   lowest_wss <- Inf
   
@@ -111,7 +69,7 @@ for (hyperspectral_path in tif_files) {
   
   cat("Optimal nstart for", hyperspectral_path, ":", best_nstart, "\n")
   
-  # Step 2: Evaluate WSS for different numbers of clusters using the best nstart
+  # Evaluate WSS for different numbers of clusters using the best nstart
   potential_k_values <- min_clusters:max_clusters
   wss_values <- numeric(length(potential_k_values))
   
@@ -139,7 +97,7 @@ for (hyperspectral_path in tif_files) {
   
   cat("Optimal k for", hyperspectral_path, ":", optimal_k_elbow, "\n")
   
-  # Step 3: Perform final k-means clustering
+  # Perform final k-means clustering
   final_kmeans_result <- kmeans(scaled_pca_matrix, centers = optimal_k_elbow, nstart = best_nstart)
   cluster_assignments <- final_kmeans_result$cluster
   

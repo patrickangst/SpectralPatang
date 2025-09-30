@@ -1,3 +1,18 @@
+# ############################################################
+# Script Name:    DataAnalysis.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Wrapper for biodiversity calculations using BiodivMapR, including spectral species mapping, alpha and beta diversity analysis.
+#
+# Dependencies:   BiodivMapR, terra
+# Input Files:    Hyperspectral images, mask files
+# Output Files:   Diversity metrics, processed rasters
+#
+# License:        MIT
+# ############################################################
+
 #' Perform diversity calculations
 #'
 #' This function is a wrapper for the biodiversity calculations using the

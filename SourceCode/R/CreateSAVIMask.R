@@ -1,3 +1,18 @@
+# ############################################################
+# Script Name:    CreateSAVIMask.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Generates a SAVI (Soil Adjusted Vegetation Index) mask for rectified hyperspectral images to aid in vegetation analysis.
+#
+# Dependencies:   terra
+# Input Files:    Rectified hyperspectral images
+# Output Files:   SAVI mask rasters
+#
+# License:        MIT
+# ############################################################
+
 #' Create SAVI mask
 #'
 #' This Library is used to create a SAVI (soil adjusted vegetation index)

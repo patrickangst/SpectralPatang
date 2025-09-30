@@ -191,11 +191,6 @@ summary(model_plant_communities_lm)
 model_plant_communities_lm_model_summary_path <- file.path(output_folder_path,"model_plant_communities_lm_model_summary_all_custom.txt")
 capture.output(summary(model_plant_communities_lm), file = model_plant_communities_lm_model_summary_path)
 
-# ggplot(lm_model_input, aes(x = Unique_Spectral_Species_WCSS_Custom, y = Unique_Plant_Cummunities)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = TRUE)
-
-
 # Model Habitat Type
 model_habitat_types_lm <- lm(Unique_Habitat_Types_Short3 ~ Unique_Spectral_Species_WCSS_Custom,
                              data = lm_model_input)
@@ -214,10 +209,6 @@ summary(model_habitat_types_lm)
 model_habitat_types_lm_model_summary_path <- file.path(output_folder_path,"model_habitat_types_lm_model_summary_all_custom.txt")
 capture.output(summary(model_habitat_types_lm), file = model_habitat_types_lm_model_summary_path)
 
-# ggplot(lm_model_input, aes(x = Unique_Spectral_Species_WCSS_Custom, y = Unique_Habitat_Types_Short3)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = TRUE)
-
 # Model Plant Species
 model_plant_species_lm <- lm(Unique_Plant_Species ~ Unique_Spectral_Species_WCSS_Custom,
                              data = lm_model_input)
@@ -235,21 +226,3 @@ dev.off()
 summary(model_plant_species_lm)
 model_plant_species_lm_model_summary_path <- file.path(output_folder_path,"model_plant_species_lm_model_summary_all_custom.txt")
 capture.output(summary(model_plant_species_lm), file = model_plant_species_lm_model_summary_path)
-
-# ggplot(lm_model_input, aes(x = Unique_Spectral_Species_WCSS_Custom, y = Unique_Plant_Species)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = TRUE)
-
-# Model Plant Communities vs. Habitat type
-# model_ht_pc_lm <- lm(Unique_Habitat_Types_Short3 ~ Unique_Plant_Cummunities,
-#                              data = lm_model_input)
-# # anova(model_plant_species_lm)
-# par(mfrow = c(2, 2))
-# plot(model_ht_pc_lm)
-# 
-# summary(model_ht_pc_lm)
-# ggplot(lm_model_input, aes(x = Unique_Habitat_Types_Short3, y = Unique_Plant_Cummunities)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = TRUE)
-
-

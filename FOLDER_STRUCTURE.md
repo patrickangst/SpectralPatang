@@ -8,7 +8,6 @@ This document describes the main folders and files in the SpectralPatang workspa
     - `ArcGIS_Connections.xml`: ArcGIS connection settings.
     - `MasterThesisSpectralPatang.qgz`: QGIS project file.
     - `search_query.qqf`: QGIS search query file.
-    - `cutfiles/`: Shapefile components for spatial data.
     - `features/`: Zipped shapefiles and feature data.
     - `flight_strips/`: Contains flight boundary data and related geojson/pdf files.
 - `SourceCode/`: Main R source code and scripts for analysis.

@@ -18,11 +18,6 @@ library(pracma)
 species_data <- read_excel("All_plots_Desktop.xlsx", sheet = 'InputPlantCommunity')
 output_site_folder <- 'site_data'
 colnames(species_data) <- trimws(colnames(species_data))
-# colnames(species_data)
-
-# df <- species_data %>%
-#   as.data.frame() %>%
-#   filter(Testsite == "PRUARC_DW_1")
 
 df <- species_data %>%
   as.data.frame()

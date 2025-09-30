@@ -38,8 +38,6 @@ df_summary <- df_selection %>%
 df_summary_normalized <- df_summary %>%
   mutate(across(-Testsite, ~ . / rowSums(across(-Testsite))))
 
-
-
 # Calculate Simpson diversity index for each Testsite (row)
 df_summary_normalized$simpson_index_TAX <- diversity(df_summary_normalized[, -1], index = "simpson")
 

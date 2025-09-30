@@ -1,3 +1,18 @@
+# ############################################################
+# Script Name:    ClusterAnalysis.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Performs cluster analysis on PCA-transformed hyperspectral images to determine the optimal number of clusters using WSS and k-means.
+#
+# Dependencies:   terra, parallel
+# Input Files:    PCA-transformed hyperspectral images
+# Output Files:   Optimal cluster number, cluster assignments
+#
+# License:        MIT
+# ############################################################
+
 #' Perform cluster analysis with wss
 #'
 #' This uses wss to get the optimal kmeans cluster number.

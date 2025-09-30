@@ -1,3 +1,18 @@
+# ############################################################
+# Script Name:    RectifyImage.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Rectifies hyperspectral images using GDAL, optionally applying a cutline shapefile for spatial cropping.
+#
+# Dependencies:   terra, BiodivMapR
+# Input Files:    Raw hyperspectral images, cutline shapefiles
+# Output Files:   Rectified images
+#
+# License:        MIT
+# ############################################################
+
 #' Rectify hyperspectral image
 #'
 #' This function is used to rectify hyperspectral images using gdalwarp

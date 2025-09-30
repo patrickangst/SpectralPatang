@@ -28,21 +28,21 @@ set.seed(123)
 
 # Define the indices to use
 indices <- c(
-  "ratkowsky",      # ✅ Works well in high-dimensional space
-  "ptbiserial",     # ✅ Good for continuous & spectral data
-  "sdbw",           # ✅ Handles overlapping, non-convex clusters
-  "ch",             # ✅ Fast, performs well on PCA-transformed data
-  "db",             # ✅ Simple, scalable to large rasters
-  "sdindex",        # ✅ Balances compactness and separation
-  "dunn",           # ✅ Good for well-separated clusters
-  "ball",           # ✅ Based on intra-cluster variance
-  "tracew",         # ✅ Evaluates compactness (use with others)
-  "friedman",       # ✅ Designed for multivariate data
-  "rubin",          # ✅ Similar to Friedman but less sensitive to noise
-  "pseudot2",       # ✅ Useful for hierarchical partition validation
-  "beale",          # ✅ Checks significant improvement between cluster steps
-  "trcovw",         # ✅ Similar to traceW, based on trace of within-covariance
-  "silhouette"      # ✅ Balanced metric: cohesion + separation
+  "ratkowsky",
+  "ptbiserial",     
+  "sdbw",           
+  "ch",            
+  "db",             
+  "sdindex",        
+  "dunn",           
+  "ball",           
+  "tracew",         
+  "friedman",      
+  "rubin",         
+  "pseudot2",      
+  "beale",         
+  "trcovw",        
+  "silhouette"    
 )
 
 
@@ -60,13 +60,13 @@ for (hyperspectral_path in tif_files) {
   cat("Processing file:", hyperspectral_path, "\n")
   cat("============================\n")
   
-  # Step 6: Save results
+  # Save results
   base_name <- file_path_sans_ext(basename(hyperspectral_path))
   
-  # Step 1: Load the GeoTIFF
+  # Load the GeoTIFF
   geo_data <- rast(hyperspectral_path)
   
-  # Step 2: Convert to 2D matrix (pixels x bands)
+  # Convert to 2D matrix (pixels x bands)
   data_matrix <- as.matrix(terra::values(geo_data))
   data_matrix <- na.omit(data_matrix)
   
@@ -75,11 +75,11 @@ for (hyperspectral_path in tif_files) {
     next
   }
   
-  # Step 3: Initialize
+  # Initialize
   best_cluster_numbers <- numeric()
   results_df <- data.frame(index = character(), best_k = numeric(), stringsAsFactors = FALSE)
   
-  # Step 4: Loop over all indices
+  # Loop over all indices
   for (index in indices) {
     cat("\n  ▶ Processing index:", index, "\n")
     
@@ -93,7 +93,7 @@ for (hyperspectral_path in tif_files) {
         index = index
       )
     }, error = function(e) {
-      cat("    ❌ Error for index:", index, "-", e$message, "\n")
+      cat("Error for index:", index, "-", e$message, "\n")
       return(NULL)
     })
     
@@ -106,10 +106,10 @@ for (hyperspectral_path in tif_files) {
         } else {
           stop("Unknown Best.nc format")
         }
-        cat("    ✅ Best number of clusters for", index, ":", best_k, "\n")
+        cat("Best number of clusters for", index, ":", best_k, "\n")
         best_k
       }, error = function(e) {
-        cat("    ⚠️ Failed to extract Best.nc for", index, "-", e$message, "\n")
+        cat("Failed to extract Best.nc for", index, "-", e$message, "\n")
         NA
       })
       
@@ -117,7 +117,7 @@ for (hyperspectral_path in tif_files) {
         best_cluster_numbers <- c(best_cluster_numbers, best_k_try)
         results_df <- rbind(results_df, data.frame(index = index, best_k = best_k_try))
         
-        # 🔄 Save/update Excel after each index
+        # Save/update Excel after each index
         base_name <- file_path_sans_ext(basename(hyperspectral_path))
         excel_filename <- file.path('nbclust_analysis', paste0(base_name, "_most_frequent_number.xlsx"))
         write.xlsx(results_df, excel_filename, rowNames = FALSE)
@@ -136,16 +136,16 @@ for (hyperspectral_path in tif_files) {
     gc()
   }
   
-  # Step 5: Majority vote (most frequent number of clusters)
+  # Majority vote (most frequent number of clusters)
   majority_vote_number <- mfv(best_cluster_numbers)
   if (length(majority_vote_number) > 1) {
     majority_vote_number <- mean(majority_vote_number)
   }
   
-  cat("  📌 Most frequent number of clusters:", majority_vote_number, "\n")
+  cat("Most frequent number of clusters:", majority_vote_number, "\n")
   
   if (is.na(majority_vote_number)) {
-    cat("  ⚠️ No valid result for this file. Skipping save.\n")
+    cat("No valid result for this file. Skipping save.\n")
     next
   }
   
@@ -155,7 +155,7 @@ for (hyperspectral_path in tif_files) {
   excel_filename <- file.path('nbclust_analysis', paste0(base_name, "_most_frequent_number.xlsx"))
   write.xlsx(results_df, excel_filename)
   
-  cat("  ✅ Results saved for", base_name, "\n")
+  cat("Results saved for", base_name, "\n")
 }
 
 cat("\n🎉 Batch analysis complete.\n")

@@ -68,7 +68,6 @@ for (img_file_path in raster_files) {
   # Rename band columns sequentially
   names(site_combined)[match(band_columns, names(site_combined))] <- paste0("Band ", seq_along(band_columns))
   
-  
   # Convert to long format for spectral data
   site_long <- site_combined %>%
     pivot_longer(-c(HbttTyp, Testsit, PltIdnt),
@@ -96,10 +95,8 @@ for (img_file_path in raster_files) {
 # Merge all processed sites into one large data frame
 merged_data <- bind_rows(all_sites_data)
 
-
 # Ensure wavelengths are sorted correctly
 unique_bandnumber_signature <- sort(unique(merged_data$BandNumber))
-
 
 # Generate spectral signature plot
 signature_plot <- ggplot(
@@ -120,7 +117,6 @@ signature_plot <- ggplot(
 
 # Display the plot
 print(signature_plot)
-
 
 # Compute mean reflectance per habitat type per wavelength
 merged_data_mean <- merged_data %>%
@@ -146,8 +142,6 @@ mean_signature_plot <- ggplot(
 # Display the plot
 print(mean_signature_plot)
 
-
-
 #
 # Statistical Testing
 #
@@ -166,11 +160,6 @@ model_lm <- lm(Reflectance ~ HbttTyp  + PltIdnt + Band + HbttTyp:Band ,
 anova(model_lm)
 par(mfrow = c(2, 2))
 plot(model_lm)
-
-
-
-
-w
 
 # Save combined dataset
 write.csv(merged_data, "Combined_Spectral_Data.csv", row.names = FALSE)

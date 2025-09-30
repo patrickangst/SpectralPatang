@@ -49,12 +49,12 @@ ground_data_pixel_values_cleaned_long <- ground_data_pixel_values_cleaned_long %
 ground_data_pixel_values_cleaned_long_modified <- ground_data_pixel_values_cleaned_long %>%
   mutate(Habitat.Type = str_extract(Habitat.Type, "^\\d+\\.\\d+"))
 
-# Step 1: Get unique Band-Wavelength mapping
+# Get unique Band-Wavelength mapping
 band_wavelength_lookup <- ground_data_pixel_values_cleaned_long_modified %>%
   select(Band, Wavelength) %>%
   distinct()
 
-# Step 2: Group by Band and Habitat.Type, compute mean/min/max
+# Group by Band and Habitat.Type, compute mean/min/max
 filtered_data_grouped <- ground_data_pixel_values_cleaned_long_modified %>%
   group_by(Band, Habitat.Type) %>%
   summarise(
@@ -477,7 +477,7 @@ ground_data_pixel_values_cleaned_long_modified_selection <- ground_data_pixel_va
 
 # Generate spectral signature plot with bands, faceted by Habitat.Type
 signature_plot_by_habitat_type <- ggplot() +
-  # 1. Background spectral regions
+  # Background spectral regions
   geom_rect(
     data = band_data,
     aes(
@@ -491,7 +491,7 @@ signature_plot_by_habitat_type <- ggplot() +
     # inherit.aes = FALSE
   ) +
 
-  # 2. Spectral reflectance lines
+  # Spectral reflectance lines
   geom_line(
     data = ground_data_pixel_values_cleaned_long_modified_selection,
     aes(
@@ -505,7 +505,6 @@ signature_plot_by_habitat_type <- ggplot() +
     linewidth = 0.45
   ) +
 
-  # *** Add this line to create separate plots for each Habitat.Type ***
   facet_wrap(
     ~ Habitat.Type,
     scales = "fixed",
@@ -513,7 +512,7 @@ signature_plot_by_habitat_type <- ggplot() +
     labeller = labeller(Habitat.Type = habitat_labels)
   ) +
 
-  # 3. Plot styling
+  # Plot styling
   labs(
     x = "Wavelength [nm]",
     y = "Reflectance",
@@ -533,7 +532,7 @@ signature_plot_by_habitat_type <- ggplot() +
   )) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
 
-  # 4. Color scales
+  # Color scales
   # Color scale (same as before)
   scale_color_manual(
     name = "Habitat Type",
@@ -641,7 +640,7 @@ mean_variation_data <- ground_data_pixel_values_cleaned_long_modified %>%
 ################################################################################
 
 
-# --- Aggregate statistics (mean, min, max reflectance) per plot ---
+# Aggregate statistics (mean, min, max reflectance) per plot
 reflectance_summary <- ground_data_pixel_values_cleaned_long_modified_selection %>%
   group_by(Habitat.Type, PlotID, Wavelength) %>%
   dplyr::summarize(
@@ -664,15 +663,15 @@ reflectance_norm <- reflectance_summary %>%
   mutate(# 1. Calculate the L2 norm (Euclidean norm) for the entire signature
     l2_norm = sqrt(sum(MeanReflectance ^ 2, na.rm = TRUE)),
 
-    # 2. Divide each reflectance value by its signature's L2 norm
+    # Divide each reflectance value by its signature's L2 norm
     NormReflectance = MeanReflectance / l2_norm) %>%
   ungroup() %>%
-  # 3. Handle cases where the norm might be 0 (if all values are 0), which would result in NaN
+  # Handle cases where the norm might be 0 (if all values are 0), which would result in NaN
   mutate(NormReflectance = ifelse(l2_norm == 0, 0, NormReflectance))
 
 # Generate spectral signature plot with bands, faceted by Habitat.Type
 signature_plot_by_habitat_type_norm <- ggplot() +
-  # 1. Background spectral regions
+  # Background spectral regions
   geom_rect(
     data = band_data,
     aes(
@@ -686,7 +685,7 @@ signature_plot_by_habitat_type_norm <- ggplot() +
     # inherit.aes = FALSE
   ) +
 
-  # 2. Spectral reflectance lines
+  # Spectral reflectance lines
   geom_line(
     data = reflectance_norm,
     aes(
@@ -700,7 +699,6 @@ signature_plot_by_habitat_type_norm <- ggplot() +
     linewidth = 0.45
   ) +
 
-  # *** Add this line to create separate plots for each Habitat.Type ***
   facet_wrap(
     ~ Habitat.Type,
     scales = "fixed",
@@ -708,7 +706,7 @@ signature_plot_by_habitat_type_norm <- ggplot() +
     labeller = labeller(Habitat.Type = habitat_labels)
   ) +
 
-  # 3. Plot styling
+  # Plot styling
   labs(
     x = "Wavelength [nm]",
     y = "Reflectance",
@@ -722,7 +720,7 @@ signature_plot_by_habitat_type_norm <- ggplot() +
   )) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
 
-  # 4. Color scales
+  # Color scales
   scale_color_manual(
     name = "Habitat Type",
     values = c(

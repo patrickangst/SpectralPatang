@@ -1,4 +1,21 @@
-rm(list = ls())
+
+############################################################
+# Script Name:    CreateAnalysis_Batch.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Batch processes subfolders containing hyperspectral data for analysis. Automates rectification and masking steps for each subfolder.
+#
+# Dependencies:   doParallel, foreach, SpectralPatang
+# Input Files:    Hyperspectral images, mask files
+# Output Files:   Processed rasters, logs
+#
+# License:        MIT
+############################################################
+
+rm(list = ls(all = TRUE))
+gc()
 graphics.off()
 
 devtools::load_all()
@@ -147,7 +164,7 @@ process_all_subfolders <- function(main_folder_path) {
 }
 
 # Example usage
-main_folder <- "D:/MasterThesis/final_hs_data_folder_test"
+main_folder <- "D:/MasterThesis/final_hs_data_folder"
 num_cores_to_use <- detectCores()  # Adjust the number of cores based on your system
 
 # Call the main function

@@ -36,7 +36,6 @@ df <- species_data %>%
 df_selection <- df %>%
   select(Testsite, `Habitat Type`)
 
-
 df_summary <- df %>%
   select(Testsite, `Habitat Type`) %>%
   group_by(Testsite) %>%

@@ -1,3 +1,19 @@
+
+############################################################
+# Script Name:    CorrelationTesting_Part_E_biodivMapR.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Tests correlation between biodivMapR spectral species indices and ecological metrics for part E of the dataset using various statistical methods and visualizations.
+#
+# Dependencies:   dplyr, tibble, ggplot2, ggpubr, cowplot, readxl, lme4, lmerTest, DescTools
+# Input Files:    Plot metrics Excel files (part E)
+# Output Files:   Correlation plots, statistics
+#
+# License:        MIT
+############################################################
+
 rm(list = ls(all = TRUE))
 gc()
 graphics.off()
@@ -69,8 +85,6 @@ correlation_results <- data.frame(
   stringsAsFactors = FALSE
 )
 
-
-# Loop over each metric and generate/save plot
 # Loop over each metric and generate/save plot
 for (i in 1:nrow(cor_metrics)) {
   xvar <- cor_metrics$x[i]
@@ -189,11 +203,6 @@ summary(model_plant_communities_lm)
 model_plant_communities_lm_model_summary_path <- file.path(output_folder_path,"model_plant_communities_lm_model_summary_part_e_biodivmapr.txt")
 capture.output(summary(model_plant_communities_lm), file = model_plant_communities_lm_model_summary_path)
 
-# ggplot(lm_model_input, aes(x = Unique_Spectral_Species_WCSS, y = Unique_Plant_Cummunities)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = TRUE)
-
-
 # Model Habitat Type
 model_habitat_types_lm <- lm(Unique_Habitat_Types ~ Unique_Spectral_Species_WCSS,
                                  data = lm_model_input)
@@ -212,10 +221,6 @@ summary(model_habitat_types_lm)
 model_habitat_types_lm_model_summary_path <- file.path(output_folder_path,"model_habitat_types_lm_model_summary_part_e_biodivmapr.txt")
 capture.output(summary(model_habitat_types_lm), file = model_habitat_types_lm_model_summary_path)
 
-# ggplot(lm_model_input, aes(x = Unique_Spectral_Species_WCSS, y = Unique_Habitat_Types)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = TRUE)
-
 # Model Plant Species
 model_plant_species_lm <- lm(Unique_Plant_Species ~ Unique_Spectral_Species_WCSS,
                              data = lm_model_input)
@@ -233,20 +238,3 @@ dev.off()
 summary(model_plant_species_lm)
 model_plant_species_lm_model_summary_path <- file.path(output_folder_path,"model_plant_species_lm_model_summary_part_e_biodivmapr.txt")
 capture.output(summary(model_plant_species_lm), file = model_plant_species_lm_model_summary_path)
-
-# ggplot(lm_model_input, aes(x = Unique_Spectral_Species_WCSS, y = Unique_Plant_Species)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = TRUE)
-
-# Model Plant Communities vs. Habitat type
-# model_ht_pc_lm <- lm(Unique_Habitat_Types ~ Unique_Plant_Cummunities,
-#                              data = lm_model_input)
-# # anova(model_plant_species_lm)
-# par(mfrow = c(2, 2))
-# plot(model_ht_pc_lm)
-# 
-# summary(model_ht_pc_lm)
-# ggplot(lm_model_input, aes(x = Unique_Habitat_Types, y = Unique_Plant_Cummunities)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = TRUE)
-

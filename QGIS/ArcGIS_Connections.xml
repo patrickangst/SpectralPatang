@@ -1,0 +1,30 @@
+<!DOCTYPE connections>
+<qgsARCGISFEATURESERVERConnections version="1.0">
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/arcticnetwork_shape/FeatureServer/0" password="" name="01_Arctic Network (Jorgenson 2009)" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/03_Atlas1/FeatureServer/0" password="" name="03_Altas1_Edwards_2000" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/04_Atlas2/FeatureServer" password="" name="04_Atlas2_Raynolds_2002" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/Atqasuk/FeatureServer" password="" name="05_Atqasuk_Komarkova_and_Webber_1980_Villarreal_2013" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/06_Barrow_IBP/FeatureServer" password="" name="06_Utqiagvik_IBP_Webber_1978_Villarreal_2012&#xa;" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/07_Utqiagvik_NGEE/FeatureServer" password="" name="07_Utqiagvik_NGEE_Sloan_2014" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/08_Canadian_Arctic_Transect/FeatureServer" password="" name="08_Canadian_Arctic_Transect_Gonzalez_2000" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/14_Flux_Towers_Zona/FeatureServer" password="" name="14_Flux_Towers_Zona_Davidson_2016" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/15_Frost_Boils/FeatureServer" password="" name="15_Frost_Boils" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/15_Frost_Boils/FeatureServer" password="" name="15_Frost_Boils_Kade_2005" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/17_Happy_Valley/FeatureServer" password="" name="17_Happy_Valley" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/ImnavaitCreek_TVEXPORT/FeatureServer" password="" name="21_Imnavait_Creek" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/24_Legacy/FeatureServer" password="" name="24_Legacy_Elias_1996" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/26_Northslope_ARCSS_LAII_Flux/FeatureServer" password="" name="26_Northslope ARCSS LAII Flux (Walker 1995 &amp;1996)" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/28_Oumalik/FeatureServer" password="" name="28_Oumalik_Ebersole_1985" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/aava_pingos_tvexport_plotmap/FeatureServer" password="" name="29_Pingos" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/30_Poplars/FeatureServer" password="" name="30_Poplars_Breen_2010_2014" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/31_Prudhoe_Bay/FeatureServer" password="" name="31_Prudhoe_Bay" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/32_Prudhoe_Bay_ARCSEES_Road_Study/FeatureServer" password="" name="32_Prudhoe_Bay_ARCSEES_Road_Study" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/33_Prudhoe_Bay_ARCSEES_Airport_Study/FeatureServer" password="" name="33_Prudhoe_Bay_ARCSEES_Airport_Study_Walker_2016" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/tundra_fires_shape/FeatureServer" password="" name="38_Tundra Fires (Breen 2015)" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/AAVA_Plot_Locations/FeatureServer" password="" name="AAVA_Plot_Locations" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Alaska_Native_Regional_Corporations_v1/FeatureServer/0" password="" name="Alaska Native Regional Corporations&#xa;" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Resolve_Ecoregions/FeatureServer" password="" name="Biomes and Ecoregions 2017" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://services.arcgis.com/2j08Y1PuezhQEfCz/arcgis/rest/services/Circumpolar_Arctic_Bioclimate_Subzones/FeatureServer" password="" name="Circumpolar Arctic Bioclimate Subzones" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://tiles.arcgis.com/tiles/2j08Y1PuezhQEfCz/arcgis/rest/services/Circumpolar_Vegetation_Map/MapServer" password="" name="Circumpolar Vegetation Map" username=""/>
+    <arcgisfeatureserver authcfg="" url="https://tiles.arcgis.com/tiles/2j08Y1PuezhQEfCz/arcgis/rest/services/Ecosystems_of_Northern_Alaska/MapServer" password="" name="Ecosystems of Northern Alaska" username=""/>
+</qgsARCGISFEATURESERVERConnections>

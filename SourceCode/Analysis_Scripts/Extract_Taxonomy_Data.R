@@ -1,3 +1,30 @@
+
+############################################################
+# Script Name:    Extract_Taxonomy_Data.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script calculates site-level (gamma) diversity metrics based
+#                 on plant taxonomic types. It reads plot-level data, aggregates it
+#                 by testsite, and calculates the richness and Simpson diversity index
+#                 for each site. These new metrics are then merged with a pre-existing
+#                 summary file, which is then overwritten with the updated data.
+#
+# Dependencies:   vegan, readxl, writexl, openxlsx, dplyr, tidyr
+#
+# Input Files:    - A master Excel file with plant taxonomy data: 'All_plots_Desktop.xlsx'
+#                   (sheet 'InputTaxonomyType').
+#                 - A summary file to be updated: 'plot_metrics/Plot_Metrics_Summary.xlsx'.
+#
+# Output Files:   - An updated summary Excel file with the combined metrics, which
+#                   overwrites the input summary file:
+#                   'plot_metrics/Plot_Metrics_Summary.xlsx'.
+#
+# License:        MIT
+############################################################
+
 rm(list = ls(all = TRUE))
 gc()
 graphics.off()
@@ -8,24 +35,7 @@ library(readxl)
 library(writexl)
 library(openxlsx)
 library(dplyr)
-library(NbClust)
-library(dbscan)
-library(ggplot2)
 library(tidyr)
-# ============================================================================
-# Project: SpectralPatang
-# Script: Extract_Taxonomy_Data.R
-# Description: Extracts and summarizes taxonomy data from Excel files, normalizing and preparing for further analysis.
-# Author: Patrick Angst
-# Date: 2025-09-30
-# Dependencies: vegan, readxl, writexl, openxlsx, dplyr, NbClust, dbscan, ggplot2, tidyr, pracma
-# ============================================================================
-
-rm(list = ls(all = TRUE))
-gc()
-graphics.off()
-
-library(pracma)
 
 # Load species abundance data
 plot_metrics_path <- 'plot_metrics'
@@ -61,7 +71,6 @@ df_summary_normalized$Unique_Plant_Types <- df_summary_normalized %>%
 df_summary_normalized <- df_summary_normalized %>%
   select(Testsite,simpson_index_TAX,Unique_Plant_Types,everything())
 
-
 df_simpson_selection <- df_summary_normalized %>%
   select(Testsite, simpson_index_TAX,Unique_Plant_Types)
 
@@ -69,7 +78,7 @@ df_combined <- summary_data %>%
   left_join(df_simpson_selection, by = "Testsite") %>%
   arrange(Testsite) %>%
   select(Testsite,simpson_index_PC,Unique_Plant_Cummunities,simpson_index_HT,Unique_Habitat_Types,simpson_index_TAX,Unique_Plant_Types)
-  
+
 print(df_combined)
 
 write_xlsx(df_combined, path = file.path(plot_metrics_path, "Plot_Metrics_Summary.xlsx"))

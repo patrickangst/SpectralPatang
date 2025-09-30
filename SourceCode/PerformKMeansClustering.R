@@ -1,3 +1,30 @@
+############################################################
+# Script Name:    PerformKMeansClustering.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script performs unsupervised k-means clustering on a series
+#                 of multi-band rasters derived from Principal Component Analysis (PCA).
+#                 It defines a function to cluster a single raster and then batch
+#                 processes a predefined list of PCA files, each with a specific
+#                 number of clusters. The resulting classified rasters are saved
+#                 as new GeoTIFF files and visualized.
+#
+# Dependencies:   terra, ggplot2, scico
+#
+# Input Files:    - A vector of paths to multi-band GeoTIFF files representing PCA results.
+#                 - A corresponding vector of integers specifying the number of clusters (k) for each file.
+#
+# Output Files:   - A single-band classified GeoTIFF raster for each input file, saved with the
+#                   suffix '_clustered_kmeans.tif'.
+#                 - Plots of each clustered raster displayed in the R graphics device.
+#                 - Progress messages printed to the console.
+#
+# License:        MIT
+############################################################
+
 rm(list = ls(all = TRUE))
 gc()
 graphics.off()

@@ -1,6 +1,24 @@
+
+############################################################
+# Script Name:    CreateSpectralSpeciesPlantCommunityCorrelationV2.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Creates correlation analysis between spectral species and
+#                 plant communities and habitat type.
+#
+# Dependencies:   terra, readxl, ggplot2, dplyr, sf, writexl, DescTools, colorspace
+# Input Files:    Hyperspectral images, mask files
+# Output Files:   Correlation analysis, logs
+#
+# License:        MIT
+############################################################
+
 rm(list = ls(all = TRUE))
 gc()
 graphics.off()
+
 
 # Load libraries
 library(terra)

@@ -1,3 +1,32 @@
+
+############################################################
+# Script Name:    ExtractSpectralLines.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script performs a spectral analysis for a single, hardcoded
+#                 testsite ('AN_TJ_1'). It extracts mean reflectance values from a
+#                 hyperspectral image for plot locations defined in a shapefile.
+#                 It then visualizes both the individual and mean spectral signatures
+#                 grouped by habitat type and conducts a preliminary statistical analysis
+#                 using a linear model (lm).
+#
+# Dependencies:   terra, sf, dplyr, ggplot2, tidyr, stringr, viridis
+#                 (Note: lme4, lmerTest, writexl, spdep, units, ape, performance,
+#                 DHARMa, and see are loaded but not used in this script).
+#
+# Input Files:    - A hyperspectral raster file for the specific testsite (e.g., 'hs_raw/AN_TJ_1').
+#                 - A shapefile with plot locations and metadata ('cluster_info_shp/metrics_data_filtered.shp').
+#
+# Output Files:   - No files are saved to disk.
+#                 - All outputs (plots, ANOVA table, model diagnostics) are displayed
+#                   directly in the R console and graphics device.
+#
+# License:        MIT
+############################################################
+
 # clean environment
 rm(list = ls(all = TRUE))
 gc()
@@ -10,15 +39,6 @@ library(ggplot2)
 library(tidyr)
 library(stringr)
 library(viridis)
-library(lme4)
-library(lmerTest)
-library(writexl)
-library(spdep)
-library(units)
-library(ape)
-library(performance)
-library(DHARMa)
-library(see)
 
 testsite_name <- 'AN_TJ_1'
 
@@ -44,14 +64,6 @@ AN_TJ_1_pixel_values <- terra::extract(
   fun = mean,           # function to apply (mean, median, etc.)
   na.rm = TRUE,         # ignore NA values
   df = TRUE             # return as data frame
-# ============================================================================
-# Project: SpectralPatang
-# Script: ExtractSpectralLines.R
-# Description: Extracts spectral lines from hyperspectral raster data for a given test site and associates them with cluster shapefile data.
-# Author: Patrick Angst
-# Date: 2025-09-30
-# Dependencies: terra, sf, dplyr, ggplot2, tidyr, stringr, viridis, lme4, lmerTest, writexl, spdep, units, ape, performance, DHARMa, see
-# ============================================================================
 )
 
 AN_TJ_1_combined <- bind_cols(AN_TJ_1, AN_TJ_1_pixel_values)
@@ -66,7 +78,6 @@ band_columns <- setdiff(names(AN_TJ_1_combined_df), c("HbttTyp", "Testsit", "Plt
 
 # Rename band columns sequentially
 names(AN_TJ_1_combined_df)[match(band_columns, names(AN_TJ_1_combined_df))] <- paste0("Band ", seq_along(band_columns))
-
 
 # Convert spectral data into long format for plotting
 AN_TJ_1_pixel_values_long <- AN_TJ_1_combined_df %>%

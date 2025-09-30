@@ -1,3 +1,28 @@
+
+############################################################
+# Script Name:    CountComparison.R
+# Author:         Patrick Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script reads combined plot metrics from an Excel file,
+#                 reshapes the data from a wide to a long format, and then
+#                 generates a grouped bar plot. The plot visually compares the
+#                 counts of spectral species, plant species, habitat types,
+#                 and plant communities across different testsites.
+#
+# Dependencies:   readxl, dplyr, tidyr, ggplot2.
+#
+# Input Files:    - An Excel file containing combined plot metrics:
+#                   'plot_metrics/Plot_Metrics_Combined.xlsx'
+#
+# Output Files:   - A PNG bar plot saved to:
+#                   'correlation_plots/barplot_species_comparison.png'
+#
+# License:        MIT
+############################################################
+
 # Clear workspace
 rm(list = ls(all = TRUE))
 gc()
@@ -6,8 +31,6 @@ graphics.off()
 # Load necessary packages
 library("readxl")
 library("dplyr")
-library("vegan")
-library("writexl")
 library("tidyr")
 library("ggplot2")
 
@@ -42,14 +65,6 @@ df_long <- my_data_filterd %>%
       Unique_Plant_Types,
       Unique_Habitat_Types,
       Unique_Plant_Cummunities
-    # ============================================================================
-    # Project: SpectralPatang
-    # Script: CountComparison.R
-    # Description: Compares counts of plant communities, habitat types, plant types, and spectral species from Excel data and generates correlation plots.
-    # Author: Patrick Angst
-    # Date: 2025-09-30
-    # Dependencies: readxl, dplyr, vegan, writexl, tidyr, ggplot2
-    # ============================================================================
     ),
     names_to = "Species_Count_Type",
     values_to = "Value"

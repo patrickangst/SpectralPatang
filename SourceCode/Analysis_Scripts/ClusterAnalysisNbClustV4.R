@@ -1,3 +1,27 @@
+############################################################
+# Script Name:    ClusterAnalysisNbClustV4.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script automates the process of finding the optimal number
+#                 of clusters (k) for k-means clustering on a batch of GeoTIFF files.
+#                 For each raster, it iterates through multiple statistical indices
+#                 using the NbClust package, collects the suggested 'k' from each,
+#                 and determines the overall best 'k' via a majority vote (mode).
+#
+# Dependencies:   terra, NbClust, tools, modeest, statip, openxlsx
+#
+# Input Files:    - Multi-band GeoTIFF files located in a sub-directory named 'hs/'.
+#
+# Output Files:   - Creates an 'nbclust_analysis/' directory. For each input raster, it generates:
+#                   - An Excel file (.xlsx) detailing the best 'k' suggested by each index.
+#                   - A text file (.txt) with the final majority-vote 'k' value.
+#                   - An R workspace file (.RData) for debugging and recovery.
+#
+# License:        MIT
+############################################################
 
 # Clean environment
 rm(list = ls(all = TRUE))
@@ -30,20 +54,20 @@ set.seed(123)
 # Define the indices to use
 indices <- c(
   "ratkowsky",
-  "ptbiserial",     
-  "sdbw",           
-  "ch",            
-  "db",             
-  "sdindex",        
-  "dunn",           
-  "ball",           
-  "tracew",         
-  "friedman",      
-  "rubin",         
-  "pseudot2",      
-  "beale",         
-  "trcovw",        
-  "silhouette"    
+  "ptbiserial",
+  "sdbw",
+  "ch",
+  "db",
+  "sdindex",
+  "dunn",
+  "ball",
+  "tracew",
+  "friedman",
+  "rubin",
+  "pseudot2",
+  "beale",
+  "trcovw",
+  "silhouette"
 )
 
 
@@ -60,30 +84,30 @@ for (hyperspectral_path in tif_files) {
   cat("\n============================\n")
   cat("Processing file:", hyperspectral_path, "\n")
   cat("============================\n")
-  
+
   # Save results
   base_name <- file_path_sans_ext(basename(hyperspectral_path))
-  
+
   # Load the GeoTIFF
   geo_data <- rast(hyperspectral_path)
-  
+
   # Convert to 2D matrix (pixels x bands)
   data_matrix <- as.matrix(terra::values(geo_data))
   data_matrix <- na.omit(data_matrix)
-  
+
   if (nrow(data_matrix) < max_clusters) {
-    cat("  ⚠️ Not enough data points for clustering (", nrow(data_matrix), " rows). Skipping.\n")
+    cat(" Not enough data points for clustering (", nrow(data_matrix), " rows). Skipping.\n")
     next
   }
-  
+
   # Initialize
   best_cluster_numbers <- numeric()
   results_df <- data.frame(index = character(), best_k = numeric(), stringsAsFactors = FALSE)
-  
+
   # Loop over all indices
   for (index in indices) {
     cat("\n  ▶ Processing index:", index, "\n")
-    
+
     nb_result <- tryCatch({
       NbClust(
         data = data_matrix,
@@ -97,7 +121,7 @@ for (hyperspectral_path in tif_files) {
       cat("Error for index:", index, "-", e$message, "\n")
       return(NULL)
     })
-    
+
     if (!is.null(nb_result) && !is.null(nb_result$Best.nc)) {
       best_k_try <- tryCatch({
         if (is.matrix(nb_result$Best.nc)) {
@@ -113,50 +137,50 @@ for (hyperspectral_path in tif_files) {
         cat("Failed to extract Best.nc for", index, "-", e$message, "\n")
         NA
       })
-      
+
       if (!is.na(best_k_try)) {
         best_cluster_numbers <- c(best_cluster_numbers, best_k_try)
         results_df <- rbind(results_df, data.frame(index = index, best_k = best_k_try))
-        
+
         # Save/update Excel after each index
         base_name <- file_path_sans_ext(basename(hyperspectral_path))
         excel_filename <- file.path('nbclust_analysis', paste0(base_name, "_most_frequent_number.xlsx"))
         write.xlsx(results_df, excel_filename, rowNames = FALSE)
-        cat("    💾 Intermediate results written to", excel_filename, "\n")
+        cat("Intermediate results written to", excel_filename, "\n")
       }
     } else {
-      cat("    ⚠️ Skipping index:", index, "- Invalid or missing Best.nc\n")
+      cat(" Skipping index:", index, "- Invalid or missing Best.nc\n")
     }
-    
-    cat("    ➕ Accumulated cluster numbers so far:", best_cluster_numbers, "\n")
-    
+
+    cat("Accumulated cluster numbers so far:", best_cluster_numbers, "\n")
+
     workspace_filename <- file.path('nbclust_analysis', paste0(base_name, "_clusteranalysis.RData"))
     save.image(file = workspace_filename)
-    
+
     rm(nb_result)
     gc()
   }
-  
+
   # Majority vote (most frequent number of clusters)
   majority_vote_number <- mfv(best_cluster_numbers)
   if (length(majority_vote_number) > 1) {
     majority_vote_number <- mean(majority_vote_number)
   }
-  
+
   cat("Most frequent number of clusters:", majority_vote_number, "\n")
-  
+
   if (is.na(majority_vote_number)) {
     cat("No valid result for this file. Skipping save.\n")
     next
   }
-  
+
   txt_filename <- file.path('nbclust_analysis', paste0(base_name, "_most_frequent_number.txt"))
   write(majority_vote_number, file = txt_filename)
-  
+
   excel_filename <- file.path('nbclust_analysis', paste0(base_name, "_most_frequent_number.xlsx"))
   write.xlsx(results_df, excel_filename)
-  
+
   cat("Results saved for", base_name, "\n")
 }
 
-cat("\n🎉 Batch analysis complete.\n")
+cat("\n Batch analysis complete.\n")

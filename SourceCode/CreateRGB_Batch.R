@@ -1,4 +1,21 @@
-rm(list = ls())
+
+############################################################
+# Script Name:    CreateRGB_Batch.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Batch processes subfolders containing hyperspectral data for analysis. Automates createing RGB image for each subfolder.
+#
+# Dependencies:   doParallel, foreach, SpectralPatang
+# Input Files:    Hyperspectral images, mask files
+# Output Files:   RGB PNGs, logs
+#
+# License:        MIT
+############################################################
+
+rm(list = ls(all = TRUE))
+gc()
 graphics.off()
 
 devtools::load_all()

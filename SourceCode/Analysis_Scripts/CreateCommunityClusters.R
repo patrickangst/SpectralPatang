@@ -1,3 +1,38 @@
+
+############################################################
+# Script Name:    CreateCommunityClusters.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script performs a batch analysis of ecological community data from
+#                 multiple testsites. For each site's species abundance data (read
+#                 from an Excel file), it calculates Bray-Curtis dissimilarities, performs
+#                 Principal Coordinates Analysis (PCoA), and applies several clustering
+#                 algorithms (Hierarchical, DBSCAN, HDBSCAN). It visualizes the results,
+#                 saves spatial cluster information as shapefiles, and aggregates all
+#                 cluster assignments and summary diversity metrics into master Excel files.
+#
+# Dependencies:   vegan, readxl, writexl, openxlsx, dplyr, dbscan, ggplot2,
+#                 tidyr, ggdendro, sf
+#
+# Input Files:    - A directory ('site_data/') containing multiple Excel files, where each
+#                   file has species abundance data for a specific testsite.
+#                 - A master metadata file ('All_plots_Desktop.xlsx') containing spatial
+#                   coordinates for all plots across all sites.
+#
+# Output Files:   - Creates three directories: 'cluster_plots', 'plot_metrics', 'cluster_info_shp'.
+#                 - For each testsite, it generates:
+#                 - Three PNG plots: a Dendrogram, a DBSCAN cluster plot, and an HDBSCAN cluster plot.
+#                 - One Shapefile (.shp) with plot locations and their assigned HDBSCAN cluster.
+#                 - Aggregated outputs for all sites:
+#                 - 'Cluster_Assignement.xlsx': A master file with cluster assignments for all plots.
+#                 - 'Cluster_Summary.xlsx': A summary file with diversity metrics for each testsite.
+#
+# License:        MIT
+############################################################
+
 # Clear R environment, free memory, and close open graphics devices
 rm(list = ls(all = TRUE))
 gc()
@@ -9,19 +44,9 @@ library(readxl)
 library(writexl)
 library(openxlsx)
 library(dplyr)
-# ============================================================================
-# Project: SpectralPatang
-# Script: CreateCommunityClusters.R
-# Description: Creates community clusters from site data, generates cluster plots, and exports results to Excel and shapefiles.
-# Author: Patrick Angst
-# Date: 2025-09-30
-# Dependencies: vegan, readxl, writexl, openxlsx, dplyr, NbClust, dbscan, ggplot2, tidyr, pracma, ggdendro, sf
-# ============================================================================
-library(NbClust)
 library(dbscan)
 library(ggplot2)
 library(tidyr)
-library(pracma)
 library(ggdendro)
 library(sf)
 
@@ -60,39 +85,39 @@ results_df <- data.frame(
 # Define function to perform clustering and plotting for each input file
 create_plots <- function(file_path, clusterinfo_df) {
   file_name_no_ext <- tools::file_path_sans_ext(basename(file_path))
-  
+
   # Read species abundance data
   species_data <- read_excel(file_path, sheet = 'Sheet 1')
   colnames(species_data) <- trimws(colnames(species_data))
-  
+
   df <- as.data.frame(species_data)
   df_cluster_assignement <- df %>% select(PlotIdentifier)
   rownames(df) <- df$PlotIdentifier
-  
+
   # Select species abundance columns only
   df_species_list <- df %>%
     select(-PlotIdentifier, -Shannon, -Simpson, -Evenness, -Richness, -HabitatType)
-  
+
   df_habitat_info <- df %>%
     select(PlotIdentifier, HabitatType) %>%
     rename(Testsite = PlotIdentifier)
-  
+
   # Calculate Bray-Curtis dissimilarity matrix
   bray_dist <- vegdist(df_species_list, method = "bray")
   bray_matrix <- as.matrix(bray_dist)
-  
+
   # Principal Coordinates Analysis (PCoA)
   bray_pcoa <- cmdscale(bray_dist, eig = TRUE, k = 2)
   bray_coords <- as.data.frame(bray_pcoa$points)
   colnames(bray_coords) <- c("PCoA1", "PCoA2")
-  
+
   # Perform DBSCAN clustering
   db <- dbscan(as.matrix(bray_dist), eps = 0.805, minPts = 2)
   bray_coords$ClusterDBSCAN <- as.factor(db$cluster)
-  
+
   # Perform Hierarchical clustering
   hc <- hclust(bray_dist, method = "ward.D2")
-  
+
   # Create and save dendrogram plot
   dendro_data <- ggdendro::dendro_data(hc)
   p_dendro <- ggplot(segment(dendro_data)) +
@@ -103,13 +128,13 @@ create_plots <- function(file_path, clusterinfo_df) {
     scale_y_continuous(expand = c(0.05, 0)) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     scale_x_continuous(breaks = 1:length(hc$labels), labels = hc$labels)
-  
+
   ggsave(
     filename = paste0(output_dir_graphs, "/", file_name_no_ext, "_DENDRO.png"),
     plot = p_dendro, width = 8, height = 6, dpi = 300
   )
   print(p_dendro)
-  
+
   # Create and save DBSCAN clustering plot
   p_dbscan <- ggplot(bray_coords, aes(x = PCoA1, y = PCoA2, color = ClusterDBSCAN)) +
     geom_point(size = 4) +
@@ -120,17 +145,17 @@ create_plots <- function(file_path, clusterinfo_df) {
       y = "PCoA Dimension 2",
       color = "Cluster"
     )
-  
+
   ggsave(
     filename = paste0(output_dir_graphs, "/", file_name_no_ext, "_DBSCAN_clusters.png"),
     plot = p_dbscan, width = 8, height = 6, dpi = 300
   )
   print(p_dbscan)
-  
+
   # Perform HDBSCAN clustering on PCoA coordinates
   hdb <- hdbscan(bray_coords[, 1:2], minPts = 2)
   bray_coords$ClusterHDBSCAN <- as.factor(hdb$cluster)
-  
+
   # Create and save HDBSCAN clustering plot
   p_hdbscan <- ggplot(bray_coords, aes(x = PCoA1, y = PCoA2, color = ClusterHDBSCAN)) +
     geom_point(size = 4) +
@@ -141,46 +166,46 @@ create_plots <- function(file_path, clusterinfo_df) {
       y = "PCoA Dimension 2",
       color = "Cluster"
     )
-  
+
   ggsave(
     filename = paste0(output_dir_graphs, "/", file_name_no_ext, "_HDBSCAN_clusters.png"),
     plot = p_hdbscan, width = 8, height = 6, dpi = 300
   )
   print(p_hdbscan)
-  
+
   # Prepare cluster assignment table
   df_clusters <- bray_coords %>%
     tibble::rownames_to_column(var = "Testsite") %>%
     select(Testsite, ClusterHDBSCAN)
-  
+
   # Join with spatial info
   df_combined <- clusterinfo_df %>%
     inner_join(df_clusters, by = "Testsite") %>%
     rename(Cluster = ClusterHDBSCAN) %>%
     arrange(Testsite)
-  
+
   df_combined <- merge(df_combined, df_habitat_info, by = "Testsite", all.x = TRUE)
-  
+
   df_combined <- df_combined %>%
     mutate(
       HTS1 = sub("\\.[^.]*$", "", HabitatType),      # Removes last segment
       HTS2 = sub("\\..*", "", HabitatType)           # Keeps only first segment
     )
 
-  
+
   # Create spatial data frame
   df_combined_sf <- st_as_sf(df_combined, coords = c("Longitude", "Latitude"), crs = 4326)
-  
+
   # Write shapefile with cluster info
   shp_name <- paste0(file_name_no_ext, '_clusterinfo.shp')
   st_write(df_combined_sf, file.path(output_dir_shp, shp_name), delete_layer = TRUE)
-  
+
   # Prepare Excel cluster assignment output
   df_testsite_combined <- clusterinfo_df %>%
     inner_join(df_clusters, by = "Testsite") %>%
     rename(Cluster = ClusterHDBSCAN) %>%
     arrange(Testsite)
-  
+
   # Append to existing Excel file or create new one
   if (file.exists(cluster_file_path)) {
     existing_data <- read_xlsx(cluster_file_path)
@@ -190,19 +215,19 @@ create_plots <- function(file_path, clusterinfo_df) {
   } else {
     write_xlsx(df_testsite_combined, path = cluster_file_path)
   }
-  
+
   # Calculate cluster diversity metrics
   bray_coords_transformed <- bray_coords %>%
     select(ClusterHDBSCAN) %>%
     tibble::rownames_to_column("PlotIdentifier")
-  
+
   bray_coords_summary <- bray_coords_transformed %>%
     count(ClusterHDBSCAN) %>%
     pivot_wider(names_from = ClusterHDBSCAN, values_from = n, values_fill = 0)
-  
+
   simpson_index <- diversity(bray_coords_summary, index = "simpson")
   unique_clusters <- length(unique(bray_coords$ClusterHDBSCAN))
-  
+
   # Append summary statistics to the results dataframe
   assign("results_df", rbind(
     results_df,

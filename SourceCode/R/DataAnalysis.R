@@ -152,7 +152,7 @@ analyse_biodiversity <- function(Hyperspectral_Image_Folder_Path,
   Input_Mask_File <- PCA_Output$MaskPath
 
 
-  # # Write these numbers to a text file, one per line
+  # Write these numbers to a text file, one per line
   selected_components_file_path <- file.path(Output_Dir,
                                              rectified_image_file_name,
                                              TypePCA,

@@ -1,3 +1,33 @@
+
+############################################################
+# Script Name:    ExtractSpectralLines_Batch.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script batch processes multiple hyperspectral rasters. It
+#                 iterates through a directory of raster files, uses a master
+#                 shapefile to identify plot locations, and extracts reflectance
+#                 values for each site. The data from all sites is then combined
+#                 into a single dataset for visualization, preliminary statistical
+#                 modeling (lm), and is finally saved as a consolidated CSV file.
+#
+# Dependencies:   terra, sf, dplyr, ggplot2, tidyr, stringr, viridis, purrr, tools
+#
+# Input Files:    - A directory containing hyperspectral raster files ('hs_raw/').
+#                 - A master shapefile with plot locations and metadata for all sites
+#                   ('cluster_info_shp/metrics_data_filtered.shp').
+#
+# Output Files:   - A single CSV file with the combined spectral data from all sites:
+#                   'Combined_Spectral_Data.csv'.
+#                 - Console outputs including progress messages and an ANOVA table.
+#                 - Plots displayed in the R graphics device (individual signatures,
+#                   mean signatures, and model diagnostics).
+#
+# License:        MIT
+############################################################
+
 # Clean environment
 rm(list = ls(all = TRUE))
 gc()
@@ -31,51 +61,43 @@ all_sites_data <- list()
 
 # Iterate over all raster files
 for (img_file_path in raster_files) {
-  
+
   # Extract test site name (filename without extension)
   testsite_name <- tools::file_path_sans_ext(basename(img_file_path))
-  
+
   cat("\nProcessing:", testsite_name, "\n")
-  
+
   # Load hyperspectral raster
   hyperspectral <- rast(img_file_path)
-  
+
   # Ensure CRS matches shapefile
   cluster_shp_data <- st_transform(cluster_shp_data, crs(hyperspectral))
-  
+
   # Filter relevant test site
   site_data <- cluster_shp_data %>%
     filter(Testsit == testsite_name)
-  
+
   # Skip if no matching site data found
   if (nrow(site_data) == 0) {
     cat("⚠️ No matching site data found for:", testsite_name, "\n")
     next
-  # ============================================================================
-  # Project: SpectralPatang
-  # Script: ExtractSpectralLines_Batch.R
-  # Description: Batch extraction of spectral lines from hyperspectral raster data for all test sites, associating them with cluster shapefile data.
-  # Author: Patrick Angst
-  # Date: 2025-09-30
-  # Dependencies: terra, sf, dplyr, ggplot2, tidyr, stringr, viridis, purrr, tools
-  # ============================================================================
   }
-  
+
   # Extract pixel values
   pixel_values <- terra::extract(hyperspectral, vect(site_data))
-  
+
   # Combine spatial + spectral data
   site_combined <- bind_cols(site_data, pixel_values) %>%
     select(-Tblnmbr, -ID) %>%
     st_drop_geometry() %>%
     as.data.frame()
-  
+
   # Identify spectral band columns (exclude metadata)
   band_columns <- setdiff(names(site_combined), c("HbttTyp", "Testsit", "PltIdnt"))
-  
+
   # Rename band columns sequentially
   names(site_combined)[match(band_columns, names(site_combined))] <- paste0("Band ", seq_along(band_columns))
-  
+
   # Convert to long format for spectral data
   site_long <- site_combined %>%
     pivot_longer(-c(HbttTyp, Testsit, PltIdnt),
@@ -83,7 +105,7 @@ for (img_file_path in raster_files) {
                  values_to = "Reflectance") %>%
     mutate(BandNumber = as.numeric(str_extract(Band, "\\d+"))) %>%
     mutate(Reflectance = Reflectance / 10000)  # Scaling reflectance
-  
+
   # Apply wavelength exclusions
   site_long <- site_long %>%
     mutate(
@@ -95,7 +117,7 @@ for (img_file_path in raster_files) {
         TRUE ~ Reflectance
       )
     )
-  
+
   # Store processed data for current site
   all_sites_data[[testsite_name]] <- site_long
 }
@@ -171,7 +193,7 @@ plot(model_lm)
 
 # Save combined dataset
 write.csv(merged_data, "Combined_Spectral_Data.csv", row.names = FALSE)
-cat("\n✅ All spectral data combined and saved successfully!\n")
+cat("\n All spectral data combined and saved successfully!\n")
 
 # Print summary of final dataset
 print(head(merged_data))

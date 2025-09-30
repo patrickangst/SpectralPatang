@@ -1,3 +1,28 @@
+
+############################################################
+# Script Name:    Extract_Habitat_Type.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script calculates habitat-level diversity metrics for multiple
+#                 testsites. It reads plot-level habitat data, calculates the count
+#                 of unique habitat types and the Simpson diversity index for each site,
+#                 and then merges these new metrics with a pre-existing summary file.
+#                 The final, combined data frame is saved as a new Excel file.
+#
+# Dependencies:   vegan, readxl, writexl, openxlsx, dplyr, tidyr
+#
+# Input Files:    - A master Excel file with habitat data: 'All_plots_Desktop.xlsx' (sheet 'InputHabitatType').
+#                 - A summary file to be updated: 'plot_metrics/Cluster_Summary.xlsx'.
+#
+# Output Files:   - A new summary Excel file with the combined metrics:
+#                   'plot_metrics/Plot_Metrics_Summary.xlsx'.
+#
+# License:        MIT
+############################################################
+
 rm(list = ls(all = TRUE))
 gc()
 graphics.off()
@@ -8,11 +33,7 @@ library(readxl)
 library(writexl)
 library(openxlsx)
 library(dplyr)
-library(NbClust)
-library(dbscan)
-library(ggplot2)
 library(tidyr)
-library(pracma)
 
 # Load species abundance data
 plot_metrics_path <- 'plot_metrics'
@@ -23,14 +44,6 @@ output_dir <- plot_metrics_path
 # Create folder for plots if not exists
 if (!dir.exists(output_dir)) {
   dir.create(output_dir)
-# ============================================================================
-# Project: SpectralPatang
-# Script: Extract_Habitat_Type.R
-# Description: Extracts and summarizes habitat type data from Excel files, preparing data for further analysis and plotting.
-# Author: Patrick Angst
-# Date: 2025-09-30
-# Dependencies: vegan, readxl, writexl, openxlsx, dplyr, NbClust, dbscan, ggplot2, tidyr, pracma
-# ============================================================================
 }
 
 colnames(species_data) <- trimws(colnames(species_data))

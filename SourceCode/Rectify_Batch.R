@@ -1,4 +1,30 @@
-rm(list = ls())
+############################################################
+# Script Name:    Rectify_Batch.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script automates the batch rectification of hyperspectral
+#                 images using parallel processing. It scans a main directory for
+#                 subfolders, then applies the 'rectify_Image' function from the
+#                 'SpectralPatang' package to each subfolder concurrently.
+#
+# Dependencies:   devtools, doParallel, foreach, SpectralPatang (local package)
+#
+# Input Files:    - A main directory containing multiple subdirectories for processing.
+#                 - Each subdirectory is expected to contain a '/data/hs_raw_image/'
+#                   folder with the raw hyperspectral image files.
+#
+# Output Files:   - Rectified image files are saved into a '/data/rectified/' folder
+#                   within each corresponding subdirectory.
+#                 - Progress and completion messages are printed to the console.
+#
+# License:        MIT
+############################################################
+
+rm(list = ls(all = TRUE))
+gc()
 graphics.off()
 
 devtools::load_all()

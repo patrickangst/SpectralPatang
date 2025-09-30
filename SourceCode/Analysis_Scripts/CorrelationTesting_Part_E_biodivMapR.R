@@ -5,11 +5,26 @@
 # Date Created:   2025-09-30
 # Last Modified:  2025-09-30
 # Version:        1.0
-# Description:    Tests correlation between biodivMapR spectral species indices and ecological metrics for part E of the dataset using various statistical methods and visualizations.
 #
-# Dependencies:   dplyr, tibble, ggplot2, ggpubr, cowplot, readxl, lme4, lmerTest, DescTools
-# Input Files:    Plot metrics Excel files (part E)
-# Output Files:   Correlation plots, statistics
+# Description:    This script performs a statistical analysis to investigate the
+#                 relationship between a "spectral species" count and traditional
+#                 ecological diversity metrics (plant communities, habitat types,
+#                 and plant species). It automates correlation testing, generates
+#                 scatter plots, and builds simple linear models to evaluate the
+#                 predictive power of the spectral species metric. biodivMapR Workflow.
+#                 Group E.
+#
+# Dependencies:   dplyr, tibble, ggplot2, ggpubr, cowplot, readxl, lme4,
+#                 lmerTest, DescTools
+#
+# Input Files:    - An Excel file containing combined plot metrics:
+#                   'plot_metrics/Plot_Metrics_Combined.xlsx'
+#
+# Output Files:   - All outputs are saved to the 'correlation_plots_custom/' directory:
+#                   - Three correlation scatter plots (PNG format).
+#                   - A summary of all correlation results (CSV format).
+#                   - Three sets of linear model diagnostic plots (PNG format).
+#                   - Three text files with linear model summaries (TXT format).
 #
 # License:        MIT
 ############################################################
@@ -91,25 +106,25 @@ for (i in 1:nrow(cor_metrics)) {
   metric_label <- cor_metrics$Metric[i]
   file_name <- cor_metrics$filename[i]
   file_name <- paste0(index_name,'_',file_name)
-  
+
   # Tidy evaluation for the y-axis variable (now treated as y)
   yvar_sym <- sym(xvar)
-  
+
   # Get the variables
   x_data <- metrics_data_df$Unique_Spectral_Species_WCSS
   y_data <- metrics_data_df[[xvar]]
-  
+
   # Remove NAs
   complete_idx <- complete.cases(x_data, y_data)
   x_data <- x_data[complete_idx]
   y_data <- y_data[complete_idx]
-  
+
   n_obs <- length(x_data)
-  
+
   # Normality test
   x_normal <- shapiro.test(x_data)$p.value > 0.05
   y_normal <- shapiro.test(y_data)$p.value > 0.05
-  
+
   # Choose correlation method
   cor_method <- if (n_obs < 10) {
     "kendall"
@@ -118,14 +133,14 @@ for (i in 1:nrow(cor_metrics)) {
   } else {
     "spearman"
   }
-  
+
   # Correlation test
   cor_test <- cor.test(x_data, y_data, method = cor_method)
   r <- cor_test$estimate
   p <- cor_test$p.value
   r_abs <- abs(r)
   interpretation <- interpret_r(r)
-  
+
   # Store results
   correlation_results <- rbind(
     correlation_results,
@@ -139,11 +154,11 @@ for (i in 1:nrow(cor_metrics)) {
       stringsAsFactors = FALSE
     )
   )
-  
+
   # Determine text position dynamically
   x_max <- max(x_data, na.rm = TRUE)
   y_min <- min(y_data, na.rm = TRUE)
-  
+
   # Plot with annotation
   base_plot <- ggplot(metrics_data_df, aes(x = Unique_Spectral_Species_WCSS, y = !!yvar_sym, color = Testsite)) +
     geom_point(size = 3) +
@@ -163,12 +178,12 @@ for (i in 1:nrow(cor_metrics)) {
       plot.margin = margin(10, 10, 10, 10),
       legend.position = "right"
     )
-  
+
   # Save plot
   file_path <- file.path(output_folder_path, file_name)
   ggsave(file_path, base_plot, width = 8, height = 5)
   message(paste("Saved plot:", file_name))
-  
+
 }
 
 
@@ -190,10 +205,10 @@ model_plant_communities_lm <- lm(Unique_Plant_Cummunities ~ Unique_Spectral_Spec
                data = lm_model_input)
 # anova(model_plant_communities_lm)
 model_plant_communities_lm_residuals_path <- file.path(output_folder_path,"model_plant_communities_lm_residuals_part_e_biodivmapr.png")
-png(model_plant_communities_lm_residuals_path, 
-    width = 8, 
-    height = 6, 
-    units = "in", 
+png(model_plant_communities_lm_residuals_path,
+    width = 8,
+    height = 6,
+    units = "in",
     res = 300)
 par(mfrow = c(2, 2))
 plot(model_plant_communities_lm)
@@ -208,10 +223,10 @@ model_habitat_types_lm <- lm(Unique_Habitat_Types ~ Unique_Spectral_Species_WCSS
                                  data = lm_model_input)
 # anova(model_habitat_types_lm)
 model_habitat_types_lm_residuals_path <- file.path(output_folder_path,"model_habitat_types_lm_residuals_part_e_biodivmapr.png")
-png(model_habitat_types_lm_residuals_path, 
-    width = 8, 
-    height = 6, 
-    units = "in", 
+png(model_habitat_types_lm_residuals_path,
+    width = 8,
+    height = 6,
+    units = "in",
     res = 300)
 par(mfrow = c(2, 2))
 plot(model_habitat_types_lm)
@@ -226,10 +241,10 @@ model_plant_species_lm <- lm(Unique_Plant_Species ~ Unique_Spectral_Species_WCSS
                              data = lm_model_input)
 # anova(model_plant_species_lm)
 model_plant_species_lm_residuals_path <- file.path(output_folder_path,"model_plant_species_lm_residuals_part_e_biodivmapr.png")
-png(model_plant_species_lm_residuals_path, 
-    width = 8, 
-    height = 6, 
-    units = "in", 
+png(model_plant_species_lm_residuals_path,
+    width = 8,
+    height = 6,
+    units = "in",
     res = 300)
 par(mfrow = c(2, 2))
 plot(model_plant_species_lm)

@@ -1,3 +1,34 @@
+############################################################
+# Script Name:    ExtractSpectralLinesCombinedV2.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script aggregates spectral data from multiple test sites.
+#                 It reads previously generated CSV files, combines them into a
+#                 single dataset, and performs comprehensive analysis and visualization.
+#                 Tasks include calculating mean/min/max reflectance, normalizing
+#                 signatures using an L2 norm, and generating a suite of plots
+#                 to compare habitat types across all sites.
+#
+# Dependencies:   tidyverse (for dplyr, ggplot2, tidyr, purrr, stringr),
+#                 viridis, Hmisc
+#
+# Input Files:    - Multiple CSV files named '<testsite_name>_banddata.csv', each
+#                   located within a unique subdirectory inside
+#                   'data/MasterThesis/final_hs_data_folder/'.
+#
+# Output Files:   - Multiple PNG plots saved to 'data/MasterThesis/all_testsite_signatures/':
+#                   - Mean signatures with min/max ribbons per habitat type.
+#                   - Mean signatures with numeric labels.
+#                   - Mean L2-normalized signatures per habitat type.
+#                   - Faceted plots of all individual signatures (raw and normalized).
+#                 - A habitat similarity table (mean correlation) printed to the console.
+#
+# License:        MIT
+############################################################
+
 # Clean environment
 rm(list = ls(all = TRUE))
 gc()

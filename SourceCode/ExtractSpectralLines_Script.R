@@ -1,10 +1,34 @@
-## Patrick Angst
-## Master thesis
-## 11.07.2025
-## This script extracts the spectral / reflectance values for every plot location
-## and plots it grouped by plant community and habitat type.
 
-# clean environment
+############################################################
+# Script Name:    ExtractSpectralLines_Script.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+#
+# Description:    This script defines a function to extract spectral signatures
+#                 from hyperspectral imagery for given plot coordinates. It processes
+#                 the data, generates plots for individual and mean spectral
+#                 signatures grouped by habitat type and plant community,
+#                 and saves the plots and extracted data.
+#
+# Dependencies:   terra, sf, dplyr, ggplot2, tidyr, stringr, viridis, readxl
+#                 (Note: lme4, lmerTest, writexl, spdep, units, ape,
+#                 performance, DHARMa, see are loaded but not used in this function).
+#
+# Input Files:    - Hyperspectral image (ENVI format, extensionless header)
+#                 - Ground data Excel file ('All_plots_Desktop.xlsx')
+#                 - Cluster assignment Excel file ('Cluster_Assignement.xlsx')
+#
+# Output Files:   - CSV file with extracted spectral data per plot (<testsite_name>_banddata.csv)
+#                 - PNG plot of spectral signatures by habitat type.
+#                 - PNG plot of spectral signatures by plant community.
+#                 - PNG plot of mean spectral signatures by habitat type.
+#                 - PNG plot of mean spectral signatures by plant community.
+#
+# License:        MIT
+############################################################
+
 rm(list = ls(all = TRUE))
 gc()
 graphics.off()

@@ -1,3 +1,20 @@
+
+############################################################
+# Script Name:    CreateSpectralSpeciesPlantCommunityCorrelationCustomV2.R
+# Author:         Patrick Byron Angst
+# Date Created:   2025-09-30
+# Last Modified:  2025-09-30
+# Version:        1.0
+# Description:    Creates correlation analysis between spectral species and
+#                 plant communities and habitat type Custom.
+#
+# Dependencies:   terra, readxl, ggplot2, dplyr, sf, writexl, DescTools, colorspace
+# Input Files:    Hyperspectral images, mask files
+# Output Files:   Correlation analysis, logs
+#
+# License:        MIT
+############################################################
+
 rm(list = ls(all = TRUE))
 gc()
 graphics.off()
@@ -5,7 +22,7 @@ graphics.off()
 # Load libraries
 library(terra)
 library(readxl)
-library(ggplot2) # Not used in the provided code, but good to keep if you use it elsewhere
+library(ggplot2)
 library(dplyr)
 library(sf)
 library(writexl)
@@ -45,8 +62,6 @@ results_df_habitat <- data.frame(
   G_significance = character(),
   stringsAsFactors = FALSE
 )
-
-
 
 # List all .tiff files
 tiff_files <- list.files(path = tiff_dir,
@@ -105,7 +120,8 @@ for (tiff_path in tiff_files) {
       )
 
     # Only proceed if valid contingency table (more than one row AND column)
-    contingency_table <- table(matching_entries$Cluster, matching_entries$Spectral_Species)
+    contingency_table <- table(matching_entries$Cluster,
+                               matching_entries$Spectral_Species)
     # mosaicplot(contingency_table, shade = TRUE, main = "Cluster vs Raster Value")
 
     print(contingency_table)
@@ -127,10 +143,8 @@ for (tiff_path in tiff_files) {
 
     print(xy_plot)
 
-    cluster_plot_file_path <- file.path(
-      png_output,
-      paste0(tiff_name_clean, '_ss_count_plot_cluster_custom.png')
-    )
+    cluster_plot_file_path <- file.path(png_output,
+                                        paste0(tiff_name_clean, '_ss_count_plot_cluster_custom.png'))
 
     # Save plot
     ggsave(
@@ -302,14 +316,16 @@ for (tiff_path in tiff_files) {
       )
 
     # Only proceed if valid contingency table (more than one row AND column)
-    contingency_table <- table(matching_entries$HabitatType, matching_entries$Spectral_Species)
+    contingency_table <- table(matching_entries$HabitatType,
+                               matching_entries$Spectral_Species)
     # mosaicplot(contingency_table, shade = TRUE, main = "Cluster vs Raster Value")
 
     # Number of unique Spectral_Species levels
     num_vals <- length(unique(matching_entries$Spectral_Species))
     # Generate pastel colors
     pastel_colors <- qualitative_hcl(num_vals, palette = "Dark 3")
-    xy_plot <- ggplot(matching_entries, aes(x = HabitatType, fill = Spectral_Species)) +
+    xy_plot <- ggplot(matching_entries,
+                      aes(x = HabitatType, fill = Spectral_Species)) +
       geom_bar(position = "dodge") +
       scale_fill_manual(values = pastel_colors) +
       labs(
@@ -322,10 +338,8 @@ for (tiff_path in tiff_files) {
 
     print(xy_plot)
 
-    cluster_plot_file_path <- file.path(
-      png_output,
-      paste0(tiff_name_clean, '_ss_count_plot_habitat_custom.png')
-    )
+    cluster_plot_file_path <- file.path(png_output,
+                                        paste0(tiff_name_clean, '_ss_count_plot_habitat_custom.png'))
 
     # Save plot
     ggsave(

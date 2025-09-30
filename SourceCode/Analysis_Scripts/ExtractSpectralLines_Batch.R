@@ -51,6 +51,14 @@ for (img_file_path in raster_files) {
   if (nrow(site_data) == 0) {
     cat("⚠️ No matching site data found for:", testsite_name, "\n")
     next
+  # ============================================================================
+  # Project: SpectralPatang
+  # Script: ExtractSpectralLines_Batch.R
+  # Description: Batch extraction of spectral lines from hyperspectral raster data for all test sites, associating them with cluster shapefile data.
+  # Author: Patrick Angst
+  # Date: 2025-09-30
+  # Dependencies: terra, sf, dplyr, ggplot2, tidyr, stringr, viridis, purrr, tools
+  # ============================================================================
   }
   
   # Extract pixel values

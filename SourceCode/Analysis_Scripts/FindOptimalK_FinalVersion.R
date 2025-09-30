@@ -18,6 +18,14 @@ set.seed(123)
 # Create output folder if it doesn't exist
 if (!dir.exists("kmeans_analysis")) {
   dir.create("kmeans_analysis")
+# ============================================================================
+# Project: SpectralPatang
+# Script: FindOptimalK_FinalVersion.R
+# Description: Determines the optimal number of clusters (K) for k-means clustering on hyperspectral data using WSS and multiple nstart values.
+# Author: Patrick Angst
+# Date: 2025-09-30
+# Dependencies: terra, tools, ggplot2
+# ============================================================================
 }
 
 # Get list of all .tif files in "hs/"

@@ -9,6 +9,14 @@ library(readxl)
 library(writexl)
 library(openxlsx)
 library(dplyr)
+# ============================================================================
+# Project: SpectralPatang
+# Script: CreateCommunityClusters.R
+# Description: Creates community clusters from site data, generates cluster plots, and exports results to Excel and shapefiles.
+# Author: Patrick Angst
+# Date: 2025-09-30
+# Dependencies: vegan, readxl, writexl, openxlsx, dplyr, NbClust, dbscan, ggplot2, tidyr, pracma, ggdendro, sf
+# ============================================================================
 library(NbClust)
 library(dbscan)
 library(ggplot2)

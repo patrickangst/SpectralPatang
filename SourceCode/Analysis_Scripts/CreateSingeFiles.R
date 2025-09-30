@@ -49,6 +49,14 @@ for (site in test_sites) {
   if (nrow(df_species_list) == 0 || ncol(df_species_list) == 0) {
     print(paste("Skipping site", site, "due to lack of valid data"))
     next  # Skip to next iteration
+  # ============================================================================
+  # Project: SpectralPatang
+  # Script: CreateSingeFiles.R
+  # Description: Splits species abundance data by test site and saves each as a separate file in the site_data folder.
+  # Author: Patrick Angst
+  # Date: 2025-09-30
+  # Dependencies: vegan, readxl, writexl, openxlsx, dplyr, NbClust, dbscan, ggplot2, tidyr, pracma
+  # ============================================================================
   }
   
   # Create a dataframe with column sums (1 row)

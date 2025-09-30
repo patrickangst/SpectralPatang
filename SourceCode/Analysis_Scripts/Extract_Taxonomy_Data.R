@@ -12,6 +12,19 @@ library(NbClust)
 library(dbscan)
 library(ggplot2)
 library(tidyr)
+# ============================================================================
+# Project: SpectralPatang
+# Script: Extract_Taxonomy_Data.R
+# Description: Extracts and summarizes taxonomy data from Excel files, normalizing and preparing for further analysis.
+# Author: Patrick Angst
+# Date: 2025-09-30
+# Dependencies: vegan, readxl, writexl, openxlsx, dplyr, NbClust, dbscan, ggplot2, tidyr, pracma
+# ============================================================================
+
+rm(list = ls(all = TRUE))
+gc()
+graphics.off()
+
 library(pracma)
 
 # Load species abundance data

@@ -23,6 +23,14 @@ output_dir <- plot_metrics_path
 # Create folder for plots if not exists
 if (!dir.exists(output_dir)) {
   dir.create(output_dir)
+# ============================================================================
+# Project: SpectralPatang
+# Script: Extract_Habitat_Type.R
+# Description: Extracts and summarizes habitat type data from Excel files, preparing data for further analysis and plotting.
+# Author: Patrick Angst
+# Date: 2025-09-30
+# Dependencies: vegan, readxl, writexl, openxlsx, dplyr, NbClust, dbscan, ggplot2, tidyr, pracma
+# ============================================================================
 }
 
 colnames(species_data) <- trimws(colnames(species_data))

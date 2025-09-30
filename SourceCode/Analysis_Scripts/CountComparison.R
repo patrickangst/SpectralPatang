@@ -42,6 +42,14 @@ df_long <- my_data_filterd %>%
       Unique_Plant_Types,
       Unique_Habitat_Types,
       Unique_Plant_Cummunities
+    # ============================================================================
+    # Project: SpectralPatang
+    # Script: CountComparison.R
+    # Description: Compares counts of plant communities, habitat types, plant types, and spectral species from Excel data and generates correlation plots.
+    # Author: Patrick Angst
+    # Date: 2025-09-30
+    # Dependencies: readxl, dplyr, vegan, writexl, tidyr, ggplot2
+    # ============================================================================
     ),
     names_to = "Species_Count_Type",
     values_to = "Value"

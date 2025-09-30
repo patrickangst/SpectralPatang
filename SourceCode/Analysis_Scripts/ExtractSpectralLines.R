@@ -44,6 +44,14 @@ AN_TJ_1_pixel_values <- terra::extract(
   fun = mean,           # function to apply (mean, median, etc.)
   na.rm = TRUE,         # ignore NA values
   df = TRUE             # return as data frame
+# ============================================================================
+# Project: SpectralPatang
+# Script: ExtractSpectralLines.R
+# Description: Extracts spectral lines from hyperspectral raster data for a given test site and associates them with cluster shapefile data.
+# Author: Patrick Angst
+# Date: 2025-09-30
+# Dependencies: terra, sf, dplyr, ggplot2, tidyr, stringr, viridis, lme4, lmerTest, writexl, spdep, units, ape, performance, DHARMa, see
+# ============================================================================
 )
 
 AN_TJ_1_combined <- bind_cols(AN_TJ_1, AN_TJ_1_pixel_values)

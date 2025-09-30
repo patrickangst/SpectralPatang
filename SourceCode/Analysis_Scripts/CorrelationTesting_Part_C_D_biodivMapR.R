@@ -39,6 +39,14 @@ interpret_r <- function(r) {
     r <= -0.4          ~ "Moderate negative",
     r <= -0.1          ~ "Weak negative",
     TRUE               ~ "Undefined"
+  # ============================================================================
+  # Project: SpectralPatang
+  # Script: CorrelationTesting_Part_C_D_biodivMapR.R
+  # Description: Tests correlation between biodivMapR spectral species indices and ecological metrics for parts C and D using various statistical methods and visualizations.
+  # Author: Patrick Angst
+  # Date: 2025-09-30
+  # Dependencies: dplyr, tibble, ggplot2, ggpubr, cowplot, readxl, lme4, lmerTest, DescTools
+  # ============================================================================
   )
 }
 
